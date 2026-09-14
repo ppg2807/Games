@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coin Flip Chess - Online 1v1</title>
-  <!-- PeerJS for zero-backend WebRTC multiplayer -->
+  <!-- PeerJS with robust WebRTC support -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
     :root {
@@ -221,15 +221,8 @@
 
   <script>
     // --- REALISTIC & THEMATIC VECTOR CHESS PIECES ---
-    // Rook = Armored War Elephant with Castle Turret
-    // King = Ornate Crowned Monarch with Beard and Cape
-    // Queen = Imperial Tiara & Royal Veil
-    // Knight = Armored Stallion Charger
-    // Bishop = Traditional Mitred Bishop
-    // Pawn = Helm & Shield Foot Soldier
     const SVGS = {
       w: {
-        // King
         k: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M22 84 L78 84 L74 76 L26 76 Z" fill="#d4af37" stroke="#111" stroke-width="2"/>
               <path d="M26 76 Q50 68 74 76 L70 54 Q50 48 30 54 Z" fill="#ffffff" stroke="#111" stroke-width="2"/>
@@ -242,7 +235,6 @@
               <path d="M50 12 L50 24 M44 16 L56 16" stroke="#d4af37" stroke-width="3.5" stroke-linecap="round"/>
               <circle cx="50" cy="12" r="2.5" fill="#fef08a"/>
             </svg>`,
-        // Queen
         q: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M24 84 L76 84 L72 76 L28 76 Z" fill="#d4af37" stroke="#111" stroke-width="2"/>
               <path d="M28 76 Q50 70 72 76 L68 56 Q50 50 32 56 Z" fill="#ffffff" stroke="#111" stroke-width="2"/>
@@ -253,33 +245,24 @@
               <circle cx="36" cy="34" r="3" fill="#fef08a" stroke="#111"/>
               <circle cx="64" cy="34" r="3" fill="#fef08a" stroke="#111"/>
             </svg>`,
-        // Rook = Battle Elephant with Castle Turret
         r: `<svg class="piece-svg" viewBox="0 0 100 100">
-              <!-- Castle Turret On Back -->
               <path d="M35 34 L65 34 L65 44 L35 44 Z" fill="#ffffff" stroke="#111" stroke-width="2"/>
               <path d="M32 24 L38 24 L38 28 L44 28 L44 24 L56 24 L56 28 L62 28 L62 24 L68 24 L66 34 L34 34 Z" fill="#d4af37" stroke="#111" stroke-width="2"/>
-              <!-- Elephant Body -->
               <path d="M20 78 L20 62 Q20 44 48 44 Q78 44 80 62 L80 78 L72 78 L72 68 Q70 64 64 64 L60 64 L60 78 L44 78 L44 65 L36 65 L36 78 Z" fill="#ffffff" stroke="#111" stroke-width="2"/>
-              <!-- Trunk & Head -->
               <path d="M22 56 Q14 56 12 68 Q10 76 16 78 Q20 78 20 72 Q18 64 26 62 Z" fill="#ffffff" stroke="#111" stroke-width="2"/>
-              <!-- Tusk -->
               <path d="M22 66 Q16 68 18 73 Q26 72 26 66 Z" fill="#fef08a" stroke="#111" stroke-width="1.5"/>
-              <!-- Eye & Ear -->
               <circle cx="28" cy="52" r="2.5" fill="#111"/>
               <path d="M30 48 Q38 48 36 60 Q30 64 28 56 Z" fill="#e2e8f0" stroke="#111" stroke-width="1.5"/>
               <rect x="16" y="78" width="68" height="6" rx="2" fill="#d4af37" stroke="#111" stroke-width="1.5"/>
             </svg>`,
-        // Knight = Warhorse
         n: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M22 84 L78 84 L74 76 L26 76 Z" fill="#d4af37" stroke="#111" stroke-width="2"/>
               <path d="M30 76 C28 62 22 52 32 40 C35 36 34 26 40 22 C44 26 48 24 50 28 C64 26 74 38 72 54 C72 64 74 70 74 76 Z" fill="#ffffff" stroke="#111" stroke-width="2"/>
               <path d="M32 40 L20 50 C18 56 22 60 28 58 L32 54" fill="#ffffff" stroke="#111" stroke-width="2"/>
-              <!-- Bridle & Mane -->
               <circle cx="30" cy="46" r="2.5" fill="#111"/>
               <path d="M54 28 Q62 38 66 54" stroke="#d4af37" stroke-width="3" fill="none"/>
               <path d="M28 58 L38 50" stroke="#d4af37" stroke-width="2"/>
             </svg>`,
-        // Bishop
         b: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M26 84 L74 84 L70 76 L30 76 Z" fill="#d4af37" stroke="#111" stroke-width="2"/>
               <path d="M32 76 Q50 68 68 76 L64 58 Q50 52 36 58 Z" fill="#ffffff" stroke="#111" stroke-width="2"/>
@@ -287,18 +270,15 @@
               <path d="M42 42 L58 48 M46 34 L54 56" stroke="#d4af37" stroke-width="2.5" stroke-linecap="round"/>
               <circle cx="50" cy="22" r="3.5" fill="#d4af37" stroke="#111"/>
             </svg>`,
-        // Pawn
         p: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M30 84 L70 84 L66 76 L34 76 Z" fill="#d4af37" stroke="#111" stroke-width="2"/>
               <path d="M36 76 Q50 70 64 76 L58 54 Q50 50 42 54 Z" fill="#ffffff" stroke="#111" stroke-width="2"/>
               <circle cx="50" cy="38" r="14" fill="#ffffff" stroke="#111" stroke-width="2"/>
-              <!-- Spear / Shield motif -->
               <path d="M44 38 Q50 32 56 38" stroke="#d4af37" stroke-width="2.5" fill="none"/>
               <circle cx="50" cy="22" r="3" fill="#d4af37"/>
             </svg>`
       },
       b: {
-        // King
         k: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M22 84 L78 84 L74 76 L26 76 Z" fill="#334155" stroke="#f8fafc" stroke-width="1.5"/>
               <path d="M26 76 Q50 68 74 76 L70 54 Q50 48 30 54 Z" fill="#1e293b" stroke="#f8fafc" stroke-width="1.5"/>
@@ -311,7 +291,6 @@
               <path d="M50 12 L50 24 M44 16 L56 16" stroke="#d4af37" stroke-width="3.5" stroke-linecap="round"/>
               <circle cx="50" cy="12" r="2.5" fill="#fef08a"/>
             </svg>`,
-        // Queen
         q: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M24 84 L76 84 L72 76 L28 76 Z" fill="#334155" stroke="#f8fafc" stroke-width="1.5"/>
               <path d="M28 76 Q50 70 72 76 L68 56 Q50 50 32 56 Z" fill="#1e293b" stroke="#f8fafc" stroke-width="1.5"/>
@@ -322,7 +301,6 @@
               <circle cx="36" cy="34" r="3" fill="#fef08a"/>
               <circle cx="64" cy="34" r="3" fill="#fef08a"/>
             </svg>`,
-        // Rook = Elephant
         r: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M35 34 L65 34 L65 44 L35 44 Z" fill="#1e293b" stroke="#f8fafc" stroke-width="1.5"/>
               <path d="M32 24 L38 24 L38 28 L44 28 L44 24 L56 24 L56 28 L62 28 L62 24 L68 24 L66 34 L34 34 Z" fill="#d4af37" stroke="#f8fafc" stroke-width="1.5"/>
@@ -331,9 +309,8 @@
               <path d="M22 66 Q16 68 18 73 Q26 72 26 66 Z" fill="#fef08a"/>
               <circle cx="28" cy="52" r="2.5" fill="#fff"/>
               <path d="M30 48 Q38 48 36 60 Q30 64 28 56 Z" fill="#0f172a" stroke="#f8fafc" stroke-width="1"/>
-              <rect x="16" y="78" width="68" height="6" rx="2" fill="#d4af37" stroke="#f8fafc" stroke-width="1"/>
+              <rect x="16" y="78" width="68" height="6" rx="2" fill="#d4af37" stroke="#f8fafc" stroke-width="1.5"/>
             </svg>`,
-        // Knight
         n: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M22 84 L78 84 L74 76 L26 76 Z" fill="#334155" stroke="#f8fafc" stroke-width="1.5"/>
               <path d="M30 76 C28 62 22 52 32 40 C35 36 34 26 40 22 C44 26 48 24 50 28 C64 26 74 38 72 54 C72 64 74 70 74 76 Z" fill="#1e293b" stroke="#f8fafc" stroke-width="1.5"/>
@@ -342,7 +319,6 @@
               <path d="M54 28 Q62 38 66 54" stroke="#d4af37" stroke-width="2.5" fill="none"/>
               <path d="M28 58 L38 50" stroke="#d4af37" stroke-width="1.5"/>
             </svg>`,
-        // Bishop
         b: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M26 84 L74 84 L70 76 L30 76 Z" fill="#334155" stroke="#f8fafc" stroke-width="1.5"/>
               <path d="M32 76 Q50 68 68 76 L64 58 Q50 52 36 58 Z" fill="#1e293b" stroke="#f8fafc" stroke-width="1.5"/>
@@ -350,7 +326,6 @@
               <path d="M42 42 L58 48 M46 34 L54 56" stroke="#d4af37" stroke-width="2.5" stroke-linecap="round"/>
               <circle cx="50" cy="22" r="3.5" fill="#d4af37"/>
             </svg>`,
-        // Pawn
         p: `<svg class="piece-svg" viewBox="0 0 100 100">
               <path d="M30 84 L70 84 L66 76 L34 76 Z" fill="#334155" stroke="#f8fafc" stroke-width="1.5"/>
               <path d="M36 76 Q50 70 64 76 L58 54 Q50 50 42 54 Z" fill="#1e293b" stroke="#f8fafc" stroke-width="1.5"/>
@@ -415,7 +390,7 @@
     let board = [];
     let turn = 'w';
     let streaks = { w: 0, b: 0 };
-    let phase = 'move'; // 'move' | 'flip' | 'over'
+    let phase = 'move';
     let selectedSquare = null;
     let validMoves = [];
     let lastMove = null;
@@ -425,32 +400,53 @@
     let isFlipping = false;
     let moveCount = 1;
 
-    // --- NETWORKING (WebRTC via PeerJS) ---
+    // --- ROBUST NETWORKING VIA PEERJS & GOOGLE STUN ---
     let myRole = 'local'; // 'local' | 'w' | 'b'
     let peer = null;
     let conn = null;
+
+    const PEER_CONFIG = {
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' },
+          { urls: 'stun:global.stun.twilio.com:3478' }
+        ]
+      }
+    };
 
     function initMultiplayer() {
       const urlParams = new URLSearchParams(window.location.search);
       const roomParam = urlParams.get('room');
 
-      peer = new Peer();
+      if (roomParam) {
+        myRole = 'b';
+        document.getElementById('hostBtn').style.display = 'none';
+        updateNetUI('🔄 Connecting to host...', 'role-b', 'Black');
+        updateUI();
+      }
+
+      peer = new Peer(undefined, PEER_CONFIG);
 
       peer.on('open', (id) => {
         if (roomParam) {
-          // Joiner (Player 2 = Black)
           joinRoom(roomParam);
         }
       });
 
       peer.on('connection', (c) => {
-        // Host received connection (Player 1 = White)
         conn = c;
         myRole = 'w';
         setupConnection();
-        updateNetUI('🟢 Friend Connected!', 'role-w', 'White');
-        document.getElementById('roomLinkBox').style.display = 'none';
-        broadcast({ type: 'INIT_STATE', board, turn, streaks, phase });
+      });
+
+      peer.on('error', (err) => {
+        console.error('Peer error:', err);
+        updateNetUI('⚠️ Connection error', 'role-local', 'Error');
+        const banner = document.getElementById('statusBanner');
+        banner.className = 'status-banner alert';
+        banner.textContent = 'Network error: ' + err.type + '. Refresh to retry.';
       });
     }
 
@@ -465,33 +461,49 @@
     }
 
     function joinRoom(hostId) {
-      updateNetUI('🔄 Connecting to host...', 'role-b', 'Black');
-      conn = peer.connect(hostId);
-      myRole = 'b';
+      conn = peer.connect(hostId, { reliable: true });
       setupConnection();
     }
 
     function setupConnection() {
       conn.on('open', () => {
         if (myRole === 'b') {
-          updateNetUI('🟢 Connected to Host!', 'role-b', 'Black');
-          document.getElementById('chessboard').classList.add('flipped');
+          // Guest initiates two-way handshake
+          conn.send({ type: 'HANDSHAKE_JOIN' });
         }
       });
 
       conn.on('data', (data) => {
-        if (data.type === 'MOVE') {
-          executeMove(data.move, false);
-        } else if (data.type === 'FLIP') {
-          runFlipAnimation(data.result, data.targetDeg, false);
-        } else if (data.type === 'INIT_STATE') {
+        if (data.type === 'HANDSHAKE_JOIN' && myRole === 'w') {
+          // Host receives handshake from open channel
+          updateNetUI('🟢 Friend Connected!', 'role-w', 'White');
+          document.getElementById('roomLinkBox').style.display = 'none';
+          conn.send({
+            type: 'WELCOME_SYNC',
+            board,
+            turn,
+            streaks,
+            phase
+          });
+        } else if (data.type === 'WELCOME_SYNC') {
+          // Guest confirms sync and flips board
           board = data.board;
           turn = data.turn;
           streaks = data.streaks;
           phase = data.phase;
+          updateNetUI('🟢 Connected to Host!', 'role-b', 'Black');
+          document.getElementById('chessboard').classList.add('flipped');
           renderBoard();
           updateUI();
+        } else if (data.type === 'MOVE') {
+          executeMove(data.move, false);
+        } else if (data.type === 'FLIP') {
+          runFlipAnimation(data.result, data.targetDeg, false);
         }
+      });
+
+      conn.on('close', () => {
+        updateNetUI('❌ Opponent Disconnected', 'role-local', 'Disconnected');
       });
     }
 
@@ -585,7 +597,6 @@
             if (dr || dc) add(r + dr, c + dc);
           }
         }
-        // Castling
         if (color === 'w' && r === 7 && c === 4) {
           if (castling.wK && !board[7][5] && !board[7][6] && !isAttacked(7,4,'b') && !isAttacked(7,5,'b') && !isAttacked(7,6,'b')) {
             moves.push({ from: [7,4], to: [7,6], isCastle: 'K' });
@@ -633,19 +644,17 @@
       const legals = [];
       const enemy = color === 'w' ? 'b' : 'w';
       for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
+        for (let col = 0; col < 8; col++) {
           const piece = board[r][c];
           if (piece && piece[0] === color) {
-            const raw = getRawMoves(r, c);
+            const raw = getRawMoves(r, col);
             for (const m of raw) {
               const target = board[m.to[0]][m.to[1]];
-              // If target is King, legal winning capture
               if (target && target === enemy + 'k') {
                 legals.push(m);
                 continue;
               }
 
-              // Test simulated board
               const savedFrom = board[m.from[0]][m.from[1]];
               const savedTo = board[m.to[0]][m.to[1]];
               board[m.to[0]][m.to[1]] = savedFrom;
@@ -675,7 +684,6 @@
         broadcast({ type: 'MOVE', move: m });
       }
 
-      // Check King Capture Knockout
       if (targetPiece && targetPiece[1] === 'k') {
         board[m.to[0]][m.to[1]] = movingPiece;
         board[m.from[0]][m.from[1]] = null;
@@ -685,14 +693,12 @@
         return;
       }
 
-      // Move piece
       board[m.to[0]][m.to[1]] = movingPiece;
       board[m.from[0]][m.from[1]] = null;
 
       if (m.isEnPassant) board[m.from[0]][m.to[1]] = null;
       enPassant = m.isPawnTwo ? [(m.from[0] + m.to[0]) / 2, m.from[1]] : null;
 
-      // Castling
       if (m.isCastle === 'K') {
         const row = turn === 'w' ? 7 : 0;
         board[row][5] = board[row][7]; board[row][7] = null;
@@ -701,7 +707,6 @@
         board[row][3] = board[row][0]; board[row][0] = null;
       }
 
-      // Rights
       if (movingPiece === 'wk') castling.wK = castling.wQ = false;
       if (movingPiece === 'bk') castling.bK = castling.bQ = false;
       if (m.from[0] === 7 && m.from[1] === 7) castling.wK = false;
@@ -709,7 +714,6 @@
       if (m.from[0] === 0 && m.from[1] === 7) castling.bK = false;
       if (m.from[0] === 0 && m.from[1] === 0) castling.bQ = false;
 
-      // Promotion
       if (movingPiece[1] === 'p' && (m.to[0] === 0 || m.to[0] === 7)) {
         board[m.to[0]][m.to[1]] = turn + 'q';
       }
@@ -727,7 +731,6 @@
       validMoves = [];
       renderBoard();
 
-      // Checkmate check
       const enemyLegals = getLegalMoves(enemy);
       const enemyKing = findKing(enemy);
       if (enemyLegals.length === 0 && enemyKing && isAttacked(enemyKing[0], enemyKing[1], turn)) {
@@ -735,7 +738,6 @@
         return;
       }
 
-      // 3 Consecutive Moves Max Enforcement
       if (streaks[turn] >= 3) {
         const banner = document.getElementById('statusBanner');
         banner.className = 'status-banner alert';
@@ -756,7 +758,7 @@
     // --- COIN FLIPPING ---
     function doFlip() {
       if (phase !== 'flip' || isFlipping) return;
-      if (myRole !== 'local' && myRole !== turn) return; // Prevent flipping opponent's coin
+      if (myRole !== 'local' && myRole !== turn) return;
 
       const result = Math.random() < 0.5 ? 'CONTINUE' : 'PASS';
       const spins = 4 + Math.floor(Math.random() * 2);
@@ -846,7 +848,6 @@
 
     function handleSquareClick(r, c) {
       if (phase !== 'move') return;
-      // Online multiplayer lock: can't move opponent's pieces
       if (myRole !== 'local' && myRole !== turn) return;
 
       const piece = isOccupied(r, c);
